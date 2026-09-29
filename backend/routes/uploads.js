@@ -54,8 +54,12 @@ router.post("/", upload.single("file"), async (req, res) => {
 
 // GET /api/uploads  -> list of files (without rows)
 router.get("/", async (req, res) => {
-  const list = await Upload.find({}, { rows: 0 }).sort({ createdAt: -1 });
-  res.json(list);
+  try {
+    const list = await Upload.find({}, { rows: 0 }).sort({ createdAt: -1 });
+    res.json(list);
+  } catch (err) {
+    res.status(500).json({ message: "Failed to load files" });
+  }
 });
 
 // GET /api/uploads/:id  -> one file with its rows
