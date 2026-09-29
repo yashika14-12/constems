@@ -46,24 +46,22 @@ Open http://localhost:3000
 
 ## Deploy (free)
 
-Database on MongoDB Atlas, backend on Render, frontend on Vercel.
+Live at https://constems.vercel.app
 
-1. **MongoDB Atlas**
-   - Create a free M0 cluster and a database user.
-   - In Network Access allow `0.0.0.0/0` (Render free tier has no fixed IP).
-   - Copy the connection string, e.g. `mongodb+srv://user:pass@cluster.xxx.mongodb.net/csv_viewer`
+- **Database:** MongoDB Atlas free M0 cluster `constems` (AWS Singapore). Network access allows `0.0.0.0/0`.
+- **Backend:** Vercel project `constems-api` from `backend/` (https://constems-api.vercel.app).
+  `server.js` exports the express app so Vercel can run it as a function. `MONGO_URI` is set in the
+  project's environment variables.
+- **Frontend:** Vercel project `constems` from `frontend/`. `vercel.json` forwards `/api/*` to the backend.
 
-2. **Backend on Render**
-   - New → Web Service → pick this repo.
-   - Root directory: `backend`, build command: `npm install`, start command: `npm start`
-   - Add env variable `MONGO_URI` with the Atlas string (`PORT` is set by Render).
-   - Note the url you get, e.g. `https://constems-api.onrender.com`
-   - Free services sleep after ~15 min idle, so the first request after that can take 30-50s.
+To redeploy after changes:
 
-3. **Frontend on Vercel**
-   - In `frontend/vercel.json` replace `YOUR-RENDER-APP.onrender.com` with your Render url and push.
-   - New Project → pick this repo, root directory: `frontend` (Vite is detected automatically).
-   - `vercel.json` forwards `/api/*` to the backend, so no code change is needed.
+```
+cd backend && npx vercel deploy --prod
+cd frontend && npx vercel deploy --prod
+```
+
+Vercel functions accept request bodies up to 4.5 MB, so uploads larger than that fail in production.
 
 ## APIs
 
