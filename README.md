@@ -44,6 +44,27 @@ npm run dev
 
 Open http://localhost:3000
 
+## Deploy (free)
+
+Database on MongoDB Atlas, backend on Render, frontend on Vercel.
+
+1. **MongoDB Atlas**
+   - Create a free M0 cluster and a database user.
+   - In Network Access allow `0.0.0.0/0` (Render free tier has no fixed IP).
+   - Copy the connection string, e.g. `mongodb+srv://user:pass@cluster.xxx.mongodb.net/csv_viewer`
+
+2. **Backend on Render**
+   - New → Web Service → pick this repo.
+   - Root directory: `backend`, build command: `npm install`, start command: `npm start`
+   - Add env variable `MONGO_URI` with the Atlas string (`PORT` is set by Render).
+   - Note the url you get, e.g. `https://constems-api.onrender.com`
+   - Free services sleep after ~15 min idle, so the first request after that can take 30-50s.
+
+3. **Frontend on Vercel**
+   - In `frontend/vercel.json` replace `YOUR-RENDER-APP.onrender.com` with your Render url and push.
+   - New Project → pick this repo, root directory: `frontend` (Vite is detected automatically).
+   - `vercel.json` forwards `/api/*` to the backend, so no code change is needed.
+
 ## APIs
 
 | Method | Url | Description |
